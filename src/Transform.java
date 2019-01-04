@@ -1,3 +1,7 @@
+import java.util.Arrays;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 //好好看看 https://blog.csdn.net/a10615/article/details/51749321
 // java int= c int
 // java byte= c char
@@ -39,5 +43,71 @@ public class Transform {
             v11[4 * (i / 3) + 3] = v6;
         }
         return v11;
+    }
+
+    public static byte[] disConfusion(String confusionedStr){
+        int a1=0;
+        byte v6=0;
+        byte v7=0;
+        byte v8=0;
+        byte v9=0;
+        byte v10=0;
+        byte v11=0;
+        byte v12=0;
+        byte[] v15="Pz#`(:7F-a%diHm<kQDTVEKXI68loAqwsGgC42!R^ju0h@xYc][}S9B{M~+t$.>,J".getBytes(UTF_8);
+        byte[] v16=confusionedStr.getBytes(UTF_8);
+        int a3=v16.length;
+        int v14=a3/4;
+        a1=3*((int)a3/4);
+        byte[] v13=new byte[a1];
+        for (int i = 0; i < v14; ++i ){
+            //v6 = strchr(v15, *(char *)(v16 + 4 * i));
+            int index1=indexOfbyte(v15,v16[4*i]);
+            if(index1==-1){
+                return null;
+            }
+            v6=v15[index1];
+            v12=(byte)(4*(v6-v15[0]));
+            int index2=indexOfbyte(v15,v16[4*i+1]);
+            if(index2==-1){
+                return null;
+            }
+            v7=v15[index2];
+            v11 = (byte)(v7 - v15[0]);
+            v13[3*i]=(byte)(v12+(((v7&0xFF - v15[0]&0xFF) & 0x30) >> 4));
+
+            int index3 = indexOfbyte(v15, v16[ 4 * i + 2]);
+            if(index3==-1){
+                return null;
+            }
+            v8=v15[index3];
+            if ( (v8&0xFF - v15[0]&0xFF) == 64 ) {
+                a1 = 3 * i + 1;
+                return Arrays.copyOf(v13,a1);
+            }
+            v10 = (byte)(v8 - v15[0]);
+            v13[3 * i + 1]=(byte)(16 * v11+(((v8&0xFF - v15[0]&0xFF) & 0x3C) >> 2));
+            int index4=indexOfbyte(v15,v16[ 4 * i + 3]);
+            if(index4==-1){
+                return null;
+            }
+            v9=v15[index4];
+            if((v9&0xFF - v15[0]&0xFF) == 64){
+                a1 = 3 * i + 2;
+                return Arrays.copyOf(v13,a1);
+            }
+            v13[3 * i + 2] = (byte)((v10 << 6) + (Byte)v9 - (Byte)v15[0]);
+
+        }
+        return v13 ;
+    }
+
+    public static int indexOfbyte(byte[] source,byte target){
+        for (int j = 0; j <source.length ; j++) {
+            if(source[j]==target){
+                return j;
+            }
+        }
+        return -1;
     }
 }

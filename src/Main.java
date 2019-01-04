@@ -1,19 +1,31 @@
 import java.io.UnsupportedEncodingException;
 
 public class Main {
-    public static void main(String[] args) throws UnsupportedEncodingException {
+    public static void main(String[] args) throws UnsupportedEncodingException, AES128.KeyLengthException {
+        testEncode();
+        testDecode();
+    }
+
+    private static void testEncode(){
         String keyStr="/logistics/user/getloginverifycode-d4af719008dd7f88";
         byte[] source=AES128.str2bytes("{\"from\":\"8\",\"telephone\":\"17625955421\"}");
         try {
+
             byte[] encode=AES128.encrypt(source,keyStr);
+            System.out.println(encode.length);
             System.out.println("加密后的16进制："+AES128.byte2Hex(encode));
             byte[] confusioned=Transform.confusion(encode);
+            System.out.println(confusioned.length);
             System.out.println("confusion结果： "+new String(confusioned,AES128.CHARSET));
-            byte[] decode=AES128.decrypt(encode,keyStr);
-            System.out.println(AES128.byte2Hex(decode));
-            System.out.println(AES128.bytes2str(decode));
         } catch (AES128.KeyLengthException e) {
             e.printStackTrace();
         }
+    }
+
+    public static  void testDecode() throws AES128.KeyLengthException {
+        String keyStr="/logistics/user/getloginverifycode-d4af719008dd7f88";
+        byte[] result=Transform.disConfusion("2q>7Y}h(MTaD+0GId7(B@lx2l:{QVoV{]]I!TmVK<d![tV](CumE^BoCBsGH`>(B");
+        byte[] decode=AES128.decrypt(result,keyStr);
+        System.out.println(new String(decode));
     }
 }

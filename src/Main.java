@@ -25,6 +25,7 @@ public class Main {
     public static  void testDecode() throws AES128.KeyLengthException {
         String keyStr="/logistics/user/getloginverifycode-d4af719008dd7f88";
         byte[] result=Transform.disConfusion("KaV(z,igE(HV@0#MCuXKmtg-7TT2t}%{sSx97Idj]7H]#B[lc+hi<dw,H--4dTqCYqCGsG9<Fqss9^CH!,74T@m[u[x0F!TS$q6Iz][{T<hHsqHsu>wA`AFuSjuFR(Hzj#D0tD}t#d~x98D70awMdM]woIx~KC,G`w,!~IsA!j7l(qh9uwAEIcF<6:~>FSa-:@A~S%X}ThIIK[alj7hIl]qDiaia<KmAFQxdqqxTY.$J");
+        result=Transform.disConfusion("2q>7Y}h(MTaD+0GId7(B@lx2l:{QVoV{]]I!TmVK<d![tV](CumE^BoCBsGH`>(B");
         byte[] decode=AES128.decrypt(result,keyStr);
         System.out.println(new String(decode));
     }

@@ -55,6 +55,8 @@ public class Transform {
         byte v11=0;
         byte v12=0;
         byte[] v15="Pz#`(:7F-a%diHm<kQDTVEKXI68loAqwsGgC42!R^ju0h@xYc][}S9B{M~+t$.>,J".getBytes(UTF_8);
+        v15=Arrays.copyOf(v15,v15.length+1);
+        v15[v15.length-1]=0;
         byte[] v16=confusionedStr.getBytes(UTF_8);
         int a3=v16.length;
         int v14=a3/4;
@@ -67,36 +69,36 @@ public class Transform {
                 return null;
             }
             v6=v15[index1];
-            v12=(byte)(4*(v6-v15[0]));
+            v12=(byte)((4*index1));
             int index2=indexOfbyte(v15,v16[4*i+1]);
             if(index2==-1){
                 return null;
             }
             v7=v15[index2];
-            v11 = (byte)(v7 - v15[0]);
-            v13[3*i]=(byte)(v12+(((v7&0xFF - v15[0]&0xFF) & 0x30) >> 4));
+            v11 = (byte)(index2);
+            v13[3*i]=(byte)(v12+((index2 & 0x30) >> 4));
 
             int index3 = indexOfbyte(v15, v16[ 4 * i + 2]);
             if(index3==-1){
                 return null;
             }
             v8=v15[index3];
-            if ( (v8&0xFF - v15[0]&0xFF) == 64 ) {
+            if ( index3 == 64 ) {
                 a1 = 3 * i + 1;
                 return Arrays.copyOf(v13,a1);
             }
-            v10 = (byte)(v8 - v15[0]);
-            v13[3 * i + 1]=(byte)(16 * v11+(((v8&0xFF - v15[0]&0xFF) & 0x3C) >> 2));
+            v10 = (byte)(index3);
+            v13[3 * i + 1]=(byte)(16 * v11+((index3 & 0x3C) >> 2));
             int index4=indexOfbyte(v15,v16[ 4 * i + 3]);
             if(index4==-1){
                 return null;
             }
             v9=v15[index4];
-            if((v9&0xFF - v15[0]&0xFF) == 64){
+            if(index4 == 64){
                 a1 = 3 * i + 2;
                 return Arrays.copyOf(v13,a1);
             }
-            v13[3 * i + 2] = (byte)((v10 << 6) + (Byte)v9 - (Byte)v15[0]);
+            v13[3 * i + 2] = (byte)((v10 << 6) + index4);
 
         }
         return v13 ;

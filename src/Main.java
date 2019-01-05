@@ -1,32 +1,30 @@
-import java.io.UnsupportedEncodingException;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Main {
-    public static void main(String[] args) throws UnsupportedEncodingException, AES128.KeyLengthException {
-        testEncode();
-        testDecode();
-    }
-
-    private static void testEncode(){
-        String keyStr="/logistics/user/getloginverifycode-d4af719008dd7f88";
-        byte[] source=AES128.str2bytes("{\"from\":\"8\",\"telephone\":\"17625955421\"}");
-        try {
-
-            byte[] encode=AES128.encrypt(source,keyStr);
-            System.out.println(encode.length);
-            System.out.println("加密后的16进制："+AES128.byte2Hex(encode));
-            byte[] confusioned=Transform.confusion(encode);
-            System.out.println(confusioned.length);
-            System.out.println("confusion结果： "+new String(confusioned,AES128.CHARSET));
-        } catch (AES128.KeyLengthException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static  void testDecode() throws AES128.KeyLengthException {
-        String keyStr="/logistics/user/getloginverifycode-d4af719008dd7f88";
-        byte[] result=Transform.disConfusion("KaV(z,igE(HV@0#MCuXKmtg-7TT2t}%{sSx97Idj]7H]#B[lc+hi<dw,H--4dTqCYqCGsG9<Fqss9^CH!,74T@m[u[x0F!TS$q6Iz][{T<hHsqHsu>wA`AFuSjuFR(Hzj#D0tD}t#d~x98D70awMdM]woIx~KC,G`w,!~IsA!j7l(qh9uwAEIcF<6:~>FSa-:@A~S%X}ThIIK[alj7hIl]qDiaia<KmAFQxdqqxTY.$J");
-        result=Transform.disConfusion("2q>7Y}h(MTaD+0GId7(B@lx2l:{QVoV{]]I!TmVK<d![tV](CumE^BoCBsGH`>(B");
-        byte[] decode=AES128.decrypt(result,keyStr);
-        System.out.println(new String(decode));
+    public static void main(String[] args) throws AES128.KeyLengthException {
+        String source="刘港欢";
+        System.out.println("加密前字符串为："+source);
+        System.out.println("===================================");
+        //集成SHA256、AES128和confusion
+        String key="我的密钥";
+        byte[] afterAESEncrypt=AES128.encrypt(source.getBytes(UTF_8),key);
+        byte[] afterConfusion=AES128.base64encode(afterAESEncrypt);
+        String encodeStr=new String(afterConfusion,UTF_8);
+        System.out.println("加密最终结果; "+encodeStr);
+        byte[] afterDisConfusion= AES128.base64decode(afterConfusion);
+        byte[] afterAESDescrypt=AES128.decrypt(afterDisConfusion,key);
+        String decodeStr=new String(afterAESDescrypt,UTF_8);
+        System.out.println("解密之后："+decodeStr);
+        System.out.println("与加密前结果相同？"+decodeStr.equals(source));
+        System.out.println("===================================");
+        //只使用confusion
+        byte[] afterConfusion1=AES128.base64encode(source.getBytes(UTF_8));
+        String encodeStr1=new String(afterConfusion1,UTF_8);
+        System.out.println("base64混淆最终结果: "+encodeStr1);
+        byte[] afterDisConfusion1= AES128.base64decode(afterConfusion1);
+        String decodeStr1=new String(afterDisConfusion1,UTF_8);
+        System.out.println("解base64混淆后："+decodeStr1);
+        System.out.println("与base64混淆前结果相同？"+decodeStr1.equals(source));
     }
 }

@@ -28,7 +28,7 @@ public class AES128 {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKeySpec keySpec=new SecretKeySpec(key, "AES");
             cipher.init(Cipher.ENCRYPT_MODE,keySpec );
-            return cipher.doFinal(source);
+            return base64encode(cipher.doFinal(source));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -51,7 +51,7 @@ public class AES128 {
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"));
-            return cipher.doFinal(encoded);
+            return cipher.doFinal(base64decode(encoded));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
